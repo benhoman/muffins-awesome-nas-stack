@@ -1,0 +1,18 @@
+---
+- name: Set up the docker prune systemd service unit
+  ansible.builtin.template:
+    src: docker_prune.service.j2
+    dest: /etc/systemd/system/docker_prune.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd
+
+- name: Set up the docker prune systemd timer unit
+  ansible.builtin.template:
+    src: docker_prune.timer.j2
+    dest: /etc/systemd/system/docker_prune.timer
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Start and enable docker prune timer

@@ -1,0 +1,10 @@
+---
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Start and enable docker prune timer
+  ansible.builtin.systemd:
+    name: docker_prune.timer
+    state: started
+    enabled: true

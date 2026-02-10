@@ -60,6 +60,12 @@
         - base_setup
         - scrutiny
 
+    - role: docker_prune
+      when: install_docker or configure_scrutiny
+      tags:
+        - docker
+        - docker_prune
+
     - role: install_mergerfs
       tags:
         - install_mergerfs

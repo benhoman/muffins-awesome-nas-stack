@@ -159,6 +159,10 @@ parity_disks: # https://github.com/monstermuffin/muffins-awesome-nas-stack/tree/
     mode: dedicated
     level: 1
 
+# docker prune vars
+docker_prune_schedule: "daily"  # systemd OnCalendar format
+docker_prune_filter: "until=168h"  # Keep anything younger than 7 days
+
 # cache mover vars - https://github.com/monstermuffin/mergerfs-cache-mover
 cache_mover_autoupdate: true
 cache_mover_update_branch: main # dev applicable here too but could break stuff, check the repo for more info.

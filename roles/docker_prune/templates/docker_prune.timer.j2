@@ -1,0 +1,10 @@
+{{ ansible_managed | comment }}
+[Unit]
+Description=Timer for docker_prune service
+
+[Timer]
+OnCalendar={{ docker_prune_schedule }}
+Persistent=true
+
+[Install]
+WantedBy=timers.target
