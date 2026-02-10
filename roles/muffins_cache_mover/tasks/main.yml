@@ -44,10 +44,32 @@
         mode: "0755"
         recurse: true
 
-    - name: Ensure requirements are installed
+    # - name: Ensure requirements are installed
+    #   ansible.builtin.pip:
+    #     requirements: "{{ cache_mover_dir }}/requirements.txt"
+    #     extra_args: --break-system-packages
+        #
+    - name: Ensure venv tooling is installed
+      ansible.builtin.apt:
+        name:
+          - python3-venv
+          - python3-pip
+        state: present
+        update_cache: true
+      become: true
+
+    - name: Create cache mover virtualenv
+      ansible.builtin.pip:
+        name: pip
+        state: latest
+        virtualenv: "{{ cache_mover_dir }}/venv"
+        virtualenv_command: /usr/bin/python3.13 -m venv
+
+    - name: Install cache mover requirements into venv
       ansible.builtin.pip:
         requirements: "{{ cache_mover_dir }}/requirements.txt"
-        extra_args: --break-system-packages
+        virtualenv: "{{ cache_mover_dir }}/venv"
+
 
     - name: Deploy the cache mover configuration
       ansible.builtin.template:

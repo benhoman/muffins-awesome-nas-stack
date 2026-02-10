@@ -26,6 +26,15 @@
       - "Currently mounted: {{ ansible_facts.mounts | map(attribute='mount') | list }}"
     verbosity: 1
 
+- name: Get currently mounted paths (live)
+  ansible.builtin.command: findmnt -rn -o TARGET
+  register: findmnt_out
+  changed_when: false
+
+- name: Set mounted paths fact
+  ansible.builtin.set_fact:
+    mounted_paths: "{{ findmnt_out.stdout_lines }}"
+
 - name: Get currently mounted paths
   ansible.builtin.set_fact:
     mounted_paths: "{{ ansible_facts.mounts | map(attribute='mount') | list }}"

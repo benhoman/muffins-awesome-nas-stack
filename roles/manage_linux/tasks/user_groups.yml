@@ -3,13 +3,23 @@
   ansible.builtin.group:
     name: "{{ item }}"
     state: present
-  loop: "{{ users | map(attribute='groups') | flatten | unique }}"
+  loop: >-
+    {{
+      users
+      | map(attribute='groups', default=[])
+      | flatten
+      | reject('equalto', '')
+      | reject('none')
+      | list
+      | unique
+    }}
 
 - name: Create users
   ansible.builtin.user:
     name: "{{ item.name }}"
-    groups: "{{ item.groups }}"
-    append: "{{ item.append | default(true) }}"
+    groups: "{{ item.groups | default('') }}"
+    append: "{{ item.append | default(false) }}"
     create_home: "{{ item.create_home | default(false) }}"
     shell: "{{ item.shell | default('/bin/bash') }}"
   loop: "{{ users }}"
+
